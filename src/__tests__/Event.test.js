@@ -1,50 +1,41 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Event from '../components/Event';
+import userEvent from '@testing-library/user-event';
+
+// npx jest --config jest.config.cjs due to file conflicts
+
 
 const mockEvent = {
-  summary: 'Testing Event',
-  created: '2025-12-01T12:00:00Z',
-  location: 'Testing Location',
-  description: 'This is a test event'
+    summary: 'Testing Event',
+    created: '2025-12-01T12:00:00Z',
+    location: 'Testing Location',
+    description: 'This is a test event'
 };
 
 describe('<Event /> component', () => {
-  test('renders title, start time, location and show details button (collapsed)', () => {
-    render(<Event event={mockEvent} />);
+    let eventComponent;
 
-    // title
-    expect(screen.queryByText('Testing Event')).toBeInTheDocument();
+    beforeEach(() => {
+        eventComponent = render(<Event event={mockEvent} />);
+    });
 
-    // start time
-    expect(screen.queryByText('2025-12-01T12:00:00Z')).toBeInTheDocument();
+    test('renders title, start time, location and show details button (collapsed)', () => {
+        expect(screen.getByText('Testing Event')).toBeInTheDocument();
+        expect(screen.getByText('Start: 2025-12-01T12:00:00Z')).toBeInTheDocument();
+        expect(screen.getByText('Location: Testing Location')).toBeInTheDocument();
+        expect(screen.getByText('Show details')).toBeInTheDocument();
+    });
 
-    // location
-    expect(screen.queryByText('Testing Location')).toBeInTheDocument();
+    test('shows details when "Show details" button is clicked and toggles to "Hide details"', () => {
+        const button = screen.getByRole('button', { name: 'Show details' });
+        fireEvent.click(button);
 
-    // show details button
-    expect(screen.queryByText('Show details')).toBeInTheDocument();
-  });
+        expect(screen.getByTestId('event-details')).toBeInTheDocument();
+        expect(screen.getByText('This is a test event')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Hide details' })).toBeInTheDocument();
 
-  test('shows details when "Show details" button is clicked and toggles to "Hide details"', () => {
-    render(<Event event={mockEvent} />);
-
-    const button = screen.getByRole('button', { name: 'Show details' });
-    fireEvent.click(button);
-
-    // make it visible
-    expect(screen.getByTestId('event-details')).toBeInTheDocument();
-    expect(screen.getByText('This is a test event')).toBeInTheDocument();
-
-    // this changes the buttons test to hide details
-    expect(screen.getByRole('button', { name: 'Hide details' })).toBeInTheDocument();
-
-    // this is another click that would hide
-    fireEvent.click(screen.getByRole('button', { name: 'Hide details' }));
-    expect(screen.queryByTestId('event-details')).not.toBeInTheDocument();
-  });
-});
-
-test("placeholder", () => {
-  expect(true).toBe(true);
+        fireEvent.click(screen.getByRole('button', { name: 'Hide details' }));
+        expect(screen.queryByTestId('event-details')).not.toBeInTheDocument();
+    });
 });
