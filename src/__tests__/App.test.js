@@ -1,14 +1,24 @@
+import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import React from 'react';
 import App from '../App';
 
+describe('<App /> component', () => {
+  let AppDOM;
 
-describe('<app /> component', () => {
-    
-test('renders list of events', () => {
-       const AppDOM = render(<App />).container.firstChild;
-       expect(AppDOM.querySelector('#event-list')).toBeInTheDocument();
-     });
+  beforeEach(() => {
+    AppDOM = render(<App />).container.firstChild;
+  });
 
+  test('renders CitySearch component', () => {
+    expect(AppDOM.querySelector('#city-search')).toBeInTheDocument();
+  });
+
+  test('renders list of events', () => {
+    expect(AppDOM.querySelector('#event-list')).toBeInTheDocument();
+  });
+
+  test('renders NumberOfEvents component', () => {
+    expect(AppDOM.querySelector('#number-of-events')).toBeInTheDocument();
+  });
 });
