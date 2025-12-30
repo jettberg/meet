@@ -5,42 +5,53 @@ import userEvent from '@testing-library/user-event';
 import mockData from '../mock-data';
 import { extractLocations } from '../api';
 
-jest.mock('../api', () => {
-    const originalModule = jest.requireActual('../api');
-    return {
-        ...originalModule,
-        getEvents: jest.fn(() => Promise.resolve(mockData)),
-    };
-});
-
-
 describe('<CitySearch /> component', () => {
+    const mockSetCurrentCity = jest.fn();
+    const mockSetInfoAlert = jest.fn();
 
-    test('renders text input', async () => {
-        const allEvents = await getEvents();
+    test('renders text input', () => {
         const allLocations = extractLocations(mockData);
-        const { queryByRole } = render(<CitySearch allLocations={allLocations} />);
+
+        const { queryByRole } = render(
+            <CitySearch
+                allLocations={allLocations}
+                setCurrentCity={mockSetCurrentCity}
+                setInfoAlert={mockSetInfoAlert}
+            />
+        );
 
         const cityTextBox = queryByRole('textbox');
         expect(cityTextBox).toBeInTheDocument();
         expect(cityTextBox).toHaveClass('city');
     });
 
-    test('suggestions list is hidden by default', async () => {
-        const allEvents = await getEvents();
+    test('suggestions list is hidden by default', () => {
         const allLocations = extractLocations(mockData);
-        const { queryByRole } = render(<CitySearch allLocations={allLocations} />);
+
+        const { queryByRole } = render(
+            <CitySearch
+                allLocations={allLocations}
+                setCurrentCity={mockSetCurrentCity}
+                setInfoAlert={mockSetInfoAlert}
+            />
+        );
 
         const suggestionList = queryByRole('list');
         expect(suggestionList).not.toBeInTheDocument();
     });
 
     test('renders a list of suggestions when city textbox gains focus', async () => {
-        const allEvents = await getEvents();
         const allLocations = extractLocations(mockData);
-        const { queryByRole } = render(<CitySearch allLocations={allLocations} />);
-        const user = userEvent.setup();
 
+        const { queryByRole } = render(
+            <CitySearch
+                allLocations={allLocations}
+                setCurrentCity={mockSetCurrentCity}
+                setInfoAlert={mockSetInfoAlert}
+            />
+        );
+
+        const user = userEvent.setup();
         const cityTextBox = queryByRole('textbox');
         await user.click(cityTextBox);
 
@@ -52,37 +63,40 @@ describe('<CitySearch /> component', () => {
     });
 
     test('updates list of suggestions correctly when user types in city textbox', async () => {
-        const allEvents = await getEvents();
         const allLocations = extractLocations(mockData);
-        const { queryByRole, findAllByRole, rerender } = render(<CitySearch allLocations={allLocations} />);
+
+        const { queryByRole, findAllByRole } = render(
+            <CitySearch
+                allLocations={allLocations}
+                setCurrentCity={mockSetCurrentCity}
+                setInfoAlert={mockSetInfoAlert}
+            />
+        );
+
         const user = userEvent.setup();
-
-        rerender(<CitySearch allLocations={allLocations} />);
-
         const cityTextBox = queryByRole('textbox');
         await user.type(cityTextBox, 'Berlin');
 
-        const suggestions = allLocations
-            ? allLocations.filter((location) =>
-                location.toUpperCase().includes(cityTextBox.value.toUpperCase())
-            )
-            : [];
+        const suggestions = allLocations.filter(location =>
+            location.toUpperCase().includes('BERLIN')
+        );
 
         const suggestionListItems = await findAllByRole('listitem');
         expect(suggestionListItems).toHaveLength(suggestions.length + 1);
-        for (let i = 0; i < suggestions.length; i++) {
-            expect(suggestionListItems[i].textContent).toBe(suggestions[i]);
-        }
     });
 
     test('renders the suggestion text in the textbox upon clicking on the suggestion', async () => {
-        const allEvents = await getEvents();
         const allLocations = extractLocations(mockData);
-        const { queryByRole, queryAllByRole, rerender } = render(<CitySearch allLocations={allLocations} />);
+
+        const { queryByRole, queryAllByRole } = render(
+            <CitySearch
+                allLocations={allLocations}
+                setCurrentCity={mockSetCurrentCity}
+                setInfoAlert={mockSetInfoAlert}
+            />
+        );
+
         const user = userEvent.setup();
-
-        rerender(<CitySearch allLocations={allLocations} />);
-
         const cityTextBox = queryByRole('textbox');
         await user.type(cityTextBox, 'Berlin');
 

@@ -1,11 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+const CitySearch = ({ allLocations }) => {
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [query, setQuery] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
 
-const CitySearch = () => {
- return (
-   <div id="city-search"></div>
- )
-}
+    const handleInputChanged = (event) => {
+        const value = event.target.value;
+        const filteredLocations = allLocations
+            ? allLocations.filter((location) =>
+                location.toUpperCase().includes(value.toUpperCase())
+            )
+            : [];
 
+        setQuery(value);
+        setSuggestions(filteredLocations);
+    };
+
+    const handleItemClicked = (suggestion) => {
+        setQuery(suggestion);
+        setShowSuggestions(false);
+    };
+
+    return (
+        <div id="city-search">
+            <input
+                type="text"
+                className="city"
+                placeholder="Search for a city"
+                aria-label="City search"
+                value={query}
+                onFocus={() => setShowSuggestions(true)}
+                onChange={handleInputChanged}
+            />
+            {showSuggestions ?
+                <ul className="suggestions">
+                    {suggestions.map((suggestion) => (
+                        <li key={suggestion} onClick={() => handleItemClicked(suggestion)}>
+                            {suggestion}
+                        </li>
+                    ))}
+                    <li key="See all cities" onClick={() => handleItemClicked('See all cities')}>
+                        <b>See all cities</b>
+                    </li>
+                </ul>
+                : null
+            }
+        </div>
+    );
+};
 
 export default CitySearch;
