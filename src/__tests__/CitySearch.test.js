@@ -1,9 +1,10 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, within } from '@testing-library/react';
 import CitySearch from '../components/CitySearch';
 import userEvent from '@testing-library/user-event';
 import mockData from '../mock-data';
-import { extractLocations } from '../api';
+import { extractLocations, getEvents } from '../api';
+import App from '../App';
 
 describe('<CitySearch /> component', () => {
     const mockSetCurrentCity = jest.fn();
@@ -105,4 +106,27 @@ describe('<CitySearch /> component', () => {
 
         expect(cityTextBox).toHaveValue(BerlinGermanySuggestion.textContent);
     });
+});
+
+
+describe('<CitySearch /> integration', () => {
+    test('renders suggestions list when the app is rendered.', async () => {
+        const user = userEvent.setup();
+        const AppComponent = render(<App />);
+        const AppDOM = AppComponent.container.firstChild;
+
+
+        const CitySearchDOM = AppDOM.querySelector('#city-search');
+        const cityTextBox = within(CitySearchDOM).queryByRole('textbox');
+        await user.click(cityTextBox);
+
+
+        const allEvents = await getEvents();
+        const allLocations = extractLocations(allEvents);
+
+
+        const suggestionListItems = within(CitySearchDOM).queryAllByRole('listitem');
+        expect(suggestionListItems.length).toBe(allLocations.length + 1);
+    });
+
 });
