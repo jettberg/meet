@@ -3,11 +3,23 @@ import puppeteer from "puppeteer";
 describe("show/hide event details", () => {
     let browser;
     let page;
+
     beforeAll(async () => {
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch({
+            headless: true,
+        });
+    });
+
+    beforeEach(async () => {
         page = await browser.newPage();
         await page.goto("http://localhost:3000/");
         await page.waitForSelector(".event");
+    });
+
+    afterEach(async () => {
+        if (page) {
+            await page.close();
+        }
     });
 
     afterAll(async () => {
