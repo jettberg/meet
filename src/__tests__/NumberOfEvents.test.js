@@ -3,31 +3,30 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import NumberOfEvents from '../components/NumberOfEvents';
 
-describe('<NumberOfEvents />', () => {
+describe('<NumberOfEvents /> component', () => {
+  let input;
+  let user;
+
+  beforeEach(() => {
+    render(<NumberOfEvents
+      setCurrentNOE={jest.fn()}
+      setErrorAlert={jest.fn()}
+    />);
+    input = screen.getByRole('textbox');
+    user = userEvent.setup();
+  });
+
   test('contains an element with role textbox', () => {
-    render(<NumberOfEvents />);
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(input).toBeInTheDocument();
   });
 
   test('default value of input is 32', () => {
-    render(<NumberOfEvents />);
-    const input = screen.getByRole('textbox');
-
-    expect(input.value).toBe('32' || 32);
+    expect(input.value).toBe('32');
   });
 
   test('typing into input changes its value', async () => {
-    render(<NumberOfEvents />);
-    const user = userEvent.setup();
-    const input = screen.getByRole('textbox');
-
-    // this clears and waits for 10 input
-    await user.type(input, '{backspace}{backspace}10');
-
+    await user.clear(input);
+    await user.type(input, '10');
     expect(input.value).toBe('10');
   });
-});
-
-test("placeholder", () => {
-  expect(true).toBe(true);
 });

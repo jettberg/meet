@@ -3,12 +3,12 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Event from '../components/Event';
 import userEvent from '@testing-library/user-event';
 
-// npx jest --config jest.config.cjs due to file conflicts
-
 
 const mockEvent = {
     summary: 'Testing Event',
-    created: '2025-12-01T12:00:00Z',
+    start: {
+        dateTime: '2025-12-01T12:00:00Z'
+    },
     location: 'Testing Location',
     description: 'This is a test event'
 };
