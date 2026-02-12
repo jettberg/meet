@@ -33,7 +33,7 @@ export const getEvents = async () => {
 
 	if (token) {
 		removeQuery();
-		const url = `${process.env.REACT_APP_API_BASE_URL}/api/get-events/${token}`;
+		const url = `https://ypv3qwtsv3.execute-api.eu-central-1.amazonaws.com/dev/api/get-events/${token}`;
 		const response = await fetch(url);
 		const result = await response.json();
 		if (result) {
