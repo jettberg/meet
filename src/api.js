@@ -1,33 +1,43 @@
 import mockData from './mock-data.js';
 
-
+const checkToken = async (accessToken) => {
+  try {
+    const response = await fetch(
+      `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
+    );
+    return await response.json();
+  } catch (error) {
+    console.error("Error checking token:", error);
+    return { error: "invalid_token" };
+  }
+};
 
 export const extractLocations = (events) => {
-  if (!Array.isArray(events)) return [];
-  const extractedLocations = events.map((event) => event.location);
-  const locations = [...new Set(extractedLocations)];
-  return locations;
+	if (!Array.isArray(events)) return [];
+	const extractedLocations = events.map((event) => event.location);
+	const locations = [...new Set(extractedLocations)];
+	return locations;
 };
 
 
 
 export const getEvents = async () => {
-   if (window.location.href.startsWith("http://localhost")) {
-  return Array.isArray(mockData) ? mockData : [];
-}
+	if (window.location.href.startsWith("http://localhost")) {
+		return Array.isArray(mockData) ? mockData : [];
+	}
 
- const token = await getAccessToken();
+	const token = await getAccessToken();
 
 
- if (token) {
-   removeQuery();
-   const url =  "YOUR_GET_EVENTS_API_ENDPOINT" + "/" + token;
-   const response = await fetch(url);
-   const result = await response.json();
-   if (result) {
-     return result.events;
-   } else return null;
- }
+	if (token) {
+		removeQuery();
+		const url = `${process.env.REACT_APP_API_BASE_URL}/api/get-events/${token}`;
+		const response = await fetch(url);
+		const result = await response.json();
+		if (result) {
+			return result.events;
+		} else return null;
+	}
 };
 
 
@@ -77,8 +87,8 @@ const getToken = async (code) => {
 	const encodeCode = encodeURIComponent(code);
 	const response = await fetch(
 		"https://ypv3qwtsv3.execute-api.eu-central-1.amazonaws.com/dev/api/token" +
-			"/" +
-			encodeCode
+		"/" +
+		encodeCode
 	);
 	const { access_token } = await response.json();
 	access_token && localStorage.setItem("access_token", access_token);
