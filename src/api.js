@@ -1,17 +1,17 @@
 import mockData from './mock-data.js';
 
-console.log("REACT_APP_API_BASE_URL:", process.env.REACT_APP_API_BASE_URL);
+// console.log("REACT_APP_API_BASE_URL:", process.env.REACT_APP_API_BASE_URL);
 
 const checkToken = async (accessToken) => {
-  try {
-    const response = await fetch(
-      `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
-    );
-    return await response.json();
-  } catch (error) {
-    console.error("Error checking token:", error);
-    return { error: "invalid_token" };
-  }
+	try {
+		const response = await fetch(
+			`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
+		);
+		return await response.json();
+	} catch (error) {
+		console.error("Error checking token:", error);
+		return { error: "invalid_token" };
+	}
 };
 
 export const extractLocations = (events) => {
@@ -28,6 +28,12 @@ export const getEvents = async () => {
 		return Array.isArray(mockData) ? mockData : [];
 	}
 
+	if (!navigator.onLine) {
+		const events = localStorage.getItem("lastEvents");
+		NProgress.done();
+		return events ? JSON.parse(events) : [];
+	}
+
 	const token = await getAccessToken();
 
 
@@ -37,6 +43,8 @@ export const getEvents = async () => {
 		const response = await fetch(url);
 		const result = await response.json();
 		if (result) {
+			NProgress.done();
+			localStorage.setItem("lastEvents", JSON.stringify(result.events));
 			return result.events;
 		} else return null;
 	}
