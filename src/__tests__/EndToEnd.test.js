@@ -46,35 +46,6 @@ describe("show/hide event details", () => {
         expect(eventDetails).toBeNull();
     });
 
-    // describe("filter events by city", () => {
-    //     let browser;
-    //     let page;
-
-    //     beforeAll(async () => {
-    //         browser = await puppeteer.launch({
-    //             headless: "new",
-    //             args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    //         });
-    //     });
-
-    //     beforeEach(async () => {
-    //         page = await browser.newPage();
-    //         await page.goto("http://localhost:3000/");
-    //         await page.waitForSelector(".event");
-    //     });
-
-    //     afterEach(async () => {
-    //         if (page) {
-    //             await page.close();
-    //         }
-    //     });
-
-    //     afterAll(async () => {
-    //         if (browser) {
-    //             await browser.close();
-    //         }
-    // });
-
     test("When user hasnt searched for a city, all events are shown", async () => {
         const events = await page.$$(".event");
         expect(events.length).toBeGreaterThan(0);

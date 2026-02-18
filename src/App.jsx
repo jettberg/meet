@@ -7,6 +7,8 @@ import EventList from './components/EventList';
 import NumberOfEvents from './components/NumberOfEvents';
 import CitySearch from './components/CitySearch';
 import { InfoAlert, ErrorAlert, WarningAlert } from './components/Alert';
+import CityEventsChart from './components/CityEventsChart';
+import EventGenresChart from './components/EventGenresChart';
 
 const App = () => {
   const [events, setEvents] = useState([]);
@@ -20,9 +22,9 @@ const App = () => {
 
   useEffect(() => {
 
-    if(navigator.online) {
+    if (navigator.online) {
       setWarningAlert("");
-    }else{
+    } else {
       setWarningAlert("You are offline! There may be some events that are oudated!!")
     }
 
@@ -60,6 +62,14 @@ const App = () => {
           allLocations={allLocations}
           setCurrentCity={setCurrentCity}
           setInfoAlert={setInfoAlert} />
+
+
+          <div className= "charts-container"> 
+            <CityEventsChart allLocations={allLocations} events={events}/>
+            <EventGenresChart events={events} />
+          </div>
+
+
         <EventList
           events={events} />
       </div>
