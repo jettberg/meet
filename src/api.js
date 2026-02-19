@@ -24,30 +24,50 @@ export const extractLocations = (events) => {
 
 
 export const getEvents = async () => {
-	if (window.location.href.startsWith("http://localhost")) {
-		return Array.isArray(mockData) ? mockData : [];
-	}
+  // ----------------------------
+  // Offline mode
+  // ----------------------------
+  if (!navigator.onLine) {
+    const cachedEvents = localStorage.getItem("lastEvents");
+    if (cachedEvents) {
+      return JSON.parse(cachedEvents);
+    } else if (window.location.href.startsWith("http://localhost")) {
+      localStorage.setItem("lastEvents", JSON.stringify(mockData));
+      return mockData;
+    } else {
+      return [];
+    }
+  }
 
-	if (!navigator.onLine) {
-		const events = localStorage.getItem("lastEvents");
-		NProgress.done();
-		return events ? JSON.parse(events) : [];
-	}
+  // ----------------------------
+  // Localhost online
+  // ----------------------------
+  if (window.location.href.startsWith("http://localhost")) {
+    localStorage.setItem("lastEvents", JSON.stringify(mockData));
+    return mockData;
+  }
 
-	const token = await getAccessToken();
+  // ----------------------------
+  // Online deployed
+  // ----------------------------
+  let token = await getAccessToken();
+  if (!token) return null;
 
+  const tokenCheck = await checkToken(token);
+  if (!token || tokenCheck?.error) {
+    localStorage.removeItem("access_token");
+    token = await getAccessToken();
+    if (!token) return null;
+  }
 
-	if (token) {
-		removeQuery();
-		const url = `https://ypv3qwtsv3.execute-api.eu-central-1.amazonaws.com/dev/api/get-events/${token}`;
-		const response = await fetch(url);
-		const result = await response.json();
-		if (result) {
-			NProgress.done();
-			localStorage.setItem("lastEvents", JSON.stringify(result.events));
-			return result.events;
-		} else return null;
-	}
+  const url = `https://ypv3qwtsv3.execute-api.eu-central-1.amazonaws.com/dev/api/get-events/${token}`;
+  const response = await fetch(url);
+  const result = await response.json();
+
+  if (result?.events) {
+    localStorage.setItem("lastEvents", JSON.stringify(result.events));
+    return result.events;
+  } else return null;
 };
 
 

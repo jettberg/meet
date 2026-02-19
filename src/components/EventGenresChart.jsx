@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, useEffect, useMemo } from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 import PropTypes from "prop-types";
