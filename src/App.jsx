@@ -21,27 +21,33 @@ const App = () => {
 
 
   useEffect(() => {
+    const fetchDataAndCheckOnline = async () => {
+      const allEvents = await getEvents();
 
-    if (navigator.online) {
-      setWarningAlert("");
-    } else {
-      setWarningAlert("You are offline! There may be some events that are oudated!!")
-    }
+      const filteredEvents =
+        currentCity === "See all cities"
+          ? allEvents
+          : allEvents.filter(event => event.location === currentCity);
 
-    fetchData();
+      setEvents(filteredEvents?.slice(0, currentNOE) || []);
+      setAllLocations(extractLocations(allEvents));
+
+
+      if (!navigator.onLine) {
+        setWarningAlert(
+          "You are offline! There may be some events that are outdated!"
+        );
+      } else if (!allEvents || allEvents.length === 0) {
+        setWarningAlert(
+          "Could not load events from server. Showing cached events."
+        );
+      } else {
+        setWarningAlert("");
+      }
+    };
+
+    fetchDataAndCheckOnline();
   }, [currentCity, currentNOE]);
-
-  const fetchData = async () => {
-    const allEvents = await getEvents();
-
-    const filteredEvents =
-      currentCity === "See all cities"
-        ? allEvents
-        : allEvents.filter(event => event.location === currentCity);
-
-    setEvents(filteredEvents.slice(0, currentNOE));
-    setAllLocations(extractLocations(allEvents));
-  };
 
 
   return (
