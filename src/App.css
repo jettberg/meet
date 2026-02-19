@@ -1,9 +1,11 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:500);
+
 .App {
   text-align: center;
-  padding: 2% 5%;
+  padding: 2% 2%;
+  width: 1400px;
   max-width: 1600px;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 .App * {
@@ -100,8 +102,10 @@ input[type="number"] {
 .charts-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin: 20px 0;
+  gap: 40px;
+  margin: 10px 0;
+  width: 95%;
+  max-width: 1800px;
 }
 .charts-container > div {
   width: 100%
