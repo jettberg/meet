@@ -24,9 +24,7 @@ export const extractLocations = (events) => {
 
 
 export const getEvents = async () => {
-  // ----------------------------
-  // Offline mode
-  // ----------------------------
+  // checking if i am offline
   if (!navigator.onLine) {
     const cachedEvents = localStorage.getItem("lastEvents");
     if (cachedEvents) {
@@ -39,17 +37,13 @@ export const getEvents = async () => {
     }
   }
 
-  // ----------------------------
-  // Localhost online
-  // ----------------------------
+  // checking for the localhost
   if (window.location.href.startsWith("http://localhost")) {
     localStorage.setItem("lastEvents", JSON.stringify(mockData));
     return mockData;
   }
 
-  // ----------------------------
-  // Online deployed
-  // ----------------------------
+  // checking for the online deployument 
   let token = await getAccessToken();
   if (!token) return null;
 
