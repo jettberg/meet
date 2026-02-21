@@ -1,74 +1,194 @@
-# React + Vite
+# Meet App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Meet is a progressive web application (PWA) built with **React** and **Vite** that allows users to explore upcoming tech events across cities worldwide. The application provides dynamic filtering, interactive data visualizations, offline support, and a responsive user experience.
 
-Currently, two official plugins are available:
+The project was developed as part of a full-stack curriculum with a strong emphasis on modern frontend architecture, testability, and performance.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
+## ✨ Features
 
-Feature conversions 2-6:
+### 🔎 Search & Filter
+- Search events by city using an autocomplete interface
+- View events from all cities or a selected location
+- Dynamically control the number of displayed events
 
-**Feature 2: Show/Hide Event Details**
+### 📊 Data Visualization
+- City distribution chart of upcoming events
+- Event genre breakdown chart
+- Built using **Recharts**
 
-**Scenario 1:** An event element is collapsed by default.
--Given the user has opened the app;
-When the list of upcoming events is displayed;
-Then each event element should be collapsed by default.
+### 📡 Offline Support (PWA)
+- Cached event data for offline usage
+- Network status detection & user alerts
+- Service worker powered by **Workbox**
 
-**Scenario 2:** User can expand an event to see details.
--Given the list of upcoming events is visible;
-When the user clicks on an event;
-Then the event details should be expanded and visible.
+### ⚠️ Intelligent Alerts
+- Offline status warnings
+- Data retrieval fallback notifications
+- Error handling for invalid inputs
 
-**Scenario 3:** User can collapse an event to hide details.
--Given the user has expanded an event;
-When the user clicks on the same event again;
-Then the event details should be collapsed and hidden.
+### ✅ Tested Behavior
+- Component rendering validation
+- Integration testing for user flows
+- Behavior-driven scenarios using Jest & Testing Library
 
------
+---
 
-**Feature 3: Specify Number of Events**
+## 🧱 Tech Stack
 
-**Scenario 1:** When user hasn’t specified a number, 32 events are shown by default.
--Given the user has not specified a number of events;
-When the user opens the app;
-Then 32 upcoming events should be displayed by default.
+**Frontend**
+- React 18
+- Vite
+- Recharts
 
-**Scenario 2:** User can change the number of events displayed.
--Given the user is on the main page;
-When the user enters a new number in the event count textbox;
-Then that number of upcoming events should be displayed.
+**PWA / Offline**
+- Workbox
+- vite-plugin-pwa
 
------
+**Testing**
+- Jest
+- React Testing Library
+- Jest-Cucumber
+- Puppeteer (E2E)
 
-**Feature 4: Use the App When Offline**
+**Tooling**
+- ESLint
+- Babel
+- SWC
 
-**Scenario 1:** Show cached data when there’s no internet connection.
--Given the user has previously accessed event data while online;
-When the user opens the app without an internet connection;
-Then the app should display cached event data.
+---
 
-**Scenario 2:** Show error when user changes search settings (city, number of events).
--Given the user is offline;
-When the user attempts to search for a new city or change the number of events;
-Then an error message should be displayed indicating the action cannot be completed offline.
+## 🚀 Getting Started
 
------
+### 1. Clone the Repository
 
-**Feature 5: Add an App Shortcut to the Home Screen**
+```bash
+git clone https://github.com/yourusername/meet.git
+cd meet
+```
 
-**Scenario 1:** User can install the meet app as a shortcut on their device home screen.
--Given the user is using a compatible browser and device;
-When the user clicks on the “Install” prompt or button;
-Then the app should be added as a shortcut on the user’s home screen.
+### 2. Install Dependencies
 
------
+```bash
+npm install
+```
 
-**Feature 6: Display Charts Visualizing Event Details**
+### 3. Run Development Server
 
-**Scenario 1:** Show a chart with the number of upcoming events in each city.
--Given the user is viewing the app with events loaded;
-When the user scrolls to the data visualization section;
-Then a chart showing the number of upcoming events per city should be displayed.
+```bash
+npm run dev
+```
+
+### 4. Build for Production
+
+```bash
+npm run build
+```
+
+### 5. Preview Production Build
+
+```bash
+npm run preview
+```
+
+---
+
+## 🧪 Running Tests
+
+```bash
+npm test
+```
+
+Test coverage includes:
+
+- Unit tests
+- Integration tests
+- Behavior-driven feature tests
+- End-to-end validation
+
+---
+
+## 🧩 Application Architecture
+
+The application follows a modular, component-driven design:
+
+- **App.jsx** → State management & orchestration
+- **CitySearch** → Location filtering logic
+- **NumberOfEvents** → Event count control
+- **EventList / Event** → Event rendering
+- **Charts** → Data visualization layer
+- **API Layer** → Event retrieval & transformation
+
+State is managed via React Hooks (`useState`, `useEffect`) with unidirectional data flow.
+
+---
+
+## 📶 Offline Behavior
+
+Meet is designed to gracefully handle network interruptions:
+
+- Cached responses via service worker
+- UI warnings when offline
+- Fallback messaging when API data is unavailable
+
+This ensures consistent usability even under unreliable connectivity.
+
+---
+
+## 📖 Behavior-Driven Features
+
+### Feature: Show / Hide Event Details
+- Events are collapsed by default
+- Users can expand/collapse event details
+
+### Feature: Specify Number of Events
+- Default event count on load
+- User-controlled event quantity
+
+### Feature: Offline Usage
+- Cached data rendering
+- User feedback on restricted actions
+
+### Feature: Data Visualization
+- Visual summaries of event data
+
+---
+
+## 🎯 Project Goals
+
+This project emphasizes:
+
+✔ Modern React patterns  
+✔ Clean component architecture  
+✔ Robust test coverage  
+✔ Progressive Web App principles  
+✔ Realistic user experience flows  
+
+---
+
+## 📌 Future Enhancements
+
+Potential improvements:
+
+- Advanced filtering (date / category)
+- User preferences persistence
+- Backend integration with live APIs
+- Improved accessibility & ARIA coverage
+
+---
+
+## 📄 License
+
+This project is provided for educational and portfolio purposes.
+
+---
+
+## 👨‍💻 Author
+
+Developed by **Jett Berg**  
+Full Stack Developer
+
+---
+
+If you are reviewing this project as a developer or recruiter, feedback and suggestions are always welcome.
